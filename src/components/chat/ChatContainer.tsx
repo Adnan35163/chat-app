@@ -86,7 +86,17 @@ export default function ChatContainer({ userId }: ChatContainerProps) {
     if (error) {
       console.error("Error fetching messages:", error);
     } else {
-      setMessages(data || []);
+      // Transform the data to match the Message type
+      const transformedData =
+        data?.map((message) => ({
+          ...message,
+          // Extract the first user from the array or use undefined if empty
+          user:
+            message.user && message.user.length > 0
+              ? message.user[0]
+              : undefined,
+        })) || [];
+      setMessages(transformedData);
     }
     setLoading(false);
   };
